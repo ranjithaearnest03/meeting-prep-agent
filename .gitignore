@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite Database (optional: exclude user runtime data)
+meetings.db
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables & local secrets
+.env
+.env.local
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini

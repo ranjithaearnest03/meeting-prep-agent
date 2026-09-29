@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Prep Agent - Executive Meeting Preparation Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200 flex flex-col font-sans">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                    <i class="fa-solid fa-bolt text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-700 dark:from-white dark:via-indigo-200 dark:to-indigo-400 bg-clip-text text-transparent">Meeting Prep Agent</h1>
+                        <span class="text-xs px-2 py-0.5 font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 rounded-full">v1.0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">AI-powered preparation briefs for high-impact meetings</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Preset Samples Button -->
+                <div class="relative">
+                    <button id="sampleDropdownBtn" class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i>
+                        <span>Try Sample</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+                    </button>
+                    <!-- Samples Menu -->
+                    <div id="sampleDropdownMenu" class="hidden absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl z-50 py-1.5 overflow-hidden">
+                        <div class="px-3 py-1.5 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Pre-loaded Scenarios</div>
+                        <button onclick="loadSamplePreset('sales-pitch')" class="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-700 dark:text-slate-200 flex items-center gap-2.5 transition">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-chart-line"></i></span>
+                            <div>
+                                <div class="font-medium text-xs">Enterprise Sales Pitch</div>
+                                <div class="text-[11px] text-slate-400">Cloud migration & security deal</div>
+                            </div>
+                        </button>
+                        <button onclick="loadSamplePreset('one-on-one')" class="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-700 dark:text-slate-200 flex items-center gap-2.5 transition">
+                            <span class="w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs"><i class="fa-solid fa-user-group"></i></span>
+                            <div>
+                                <div class="font-medium text-xs">Quarterly 1-on-1 Review</div>
+                                <div class="text-[11px] text-slate-400">Career growth & workload check-in</div>
+                            </div>
+                        </button>
+                        <button onclick="loadSamplePreset('client-kickoff')" class="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-700 dark:text-slate-200 flex items-center gap-2.5 transition">
+                            <span class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-handshake"></i></span>
+                            <div>
+                                <div class="font-medium text-xs">Client Implementation Kickoff</div>
+                                <div class="text-[11px] text-slate-400">Scope, milestones & governance</div>
+                            </div>
+                        </button>
+                        <button onclick="loadSamplePreset('investor-update')" class="w-full text-left px-3 py-2 text-sm hover:bg-indigo-50 dark:hover:bg-indigo-950/40 text-slate-700 dark:text-slate-200 flex items-center gap-2.5 transition">
+                            <span class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xs"><i class="fa-solid fa-sack-dollar"></i></span>
+                            <div>
+                                <div class="font-medium text-xs">Series A Investor Review</div>
+                                <div class="text-[11px] text-slate-400">Unit economics & due diligence</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phone Access Button -->
+                <button onclick="openPhoneModal()" title="Run on Mobile Phone" class="flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium rounded-lg text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition">
+                    <i class="fa-solid fa-mobile-screen-button text-indigo-600 dark:text-indigo-400"></i>
+                    <span class="hidden sm:inline">Phone</span>
+                </button>
+
+                <!-- History Button -->
+                <button id="historyDrawerBtn" class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-clock-rotate-left text-slate-500"></i>
+                    <span class="hidden sm:inline">Saved Briefs</span>
+                    <span id="historyBadge" class="bg-indigo-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                </button>
+
+                <!-- Settings Button -->
+                <button id="settingsModalBtn" title="Settings & API Key" class="p-2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggleBtn" title="Toggle dark/light mode" class="p-2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Welcome banner for first-time / beginners -->
+        <div id="welcomeBanner" class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-200/60 dark:border-indigo-800/60 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                    <i class="fa-regular fa-compass text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">Walk into every meeting thoroughly prepared & confident</h2>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">Fill in meeting details below or click <span class="font-semibold text-indigo-600 dark:text-indigo-400 cursor-pointer underline" onclick="loadSamplePreset('sales-pitch')">Try Sample</span> to instantly see a complete executive preparation brief.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 self-end md:self-auto">
+                <button onclick="dismissBanner()" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-2 py-1">
+                    Dismiss
+                </button>
+            </div>
+        </div>
+
+        <!-- 2-Column Responsive Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Column: Input Form (5 cols on lg) -->
+            <section class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-5 sm:p-6">
+                
+                <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-regular fa-calendar-check text-indigo-600 dark:text-indigo-400"></i>
+                            Meeting Details
+                        </h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Provide the context to tailor your briefing brief</p>
+                    </div>
+                    <button type="button" onclick="resetForm()" class="text-xs text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 transition flex items-center gap-1" title="Reset form fields">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Clear</span>
+                    </button>
+                </div>
+
+                <!-- Quick Presets Bar -->
+                <div class="mb-4">
+                    <span class="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-1.5">⚡ Quick Presets</span>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button type="button" onclick="loadSamplePreset('sales-pitch')" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition flex items-center gap-1">
+                            <i class="fa-solid fa-chart-line text-[10px]"></i> Sales Pitch
+                        </button>
+                        <button type="button" onclick="loadSamplePreset('one-on-one')" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900 transition flex items-center gap-1">
+                            <i class="fa-solid fa-user-group text-[10px]"></i> 1-on-1 Review
+                        </button>
+                        <button type="button" onclick="loadSamplePreset('client-kickoff')" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900 transition flex items-center gap-1">
+                            <i class="fa-solid fa-handshake text-[10px]"></i> Client Kickoff
+                        </button>
+                        <button type="button" onclick="loadSamplePreset('investor-update')" class="px-2.5 py-1 text-xs font-medium rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900 transition flex items-center gap-1">
+                            <i class="fa-solid fa-sack-dollar text-[10px]"></i> Investor Review
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form id="meetingForm" onsubmit="handlePrepareMeeting(event)" class="space-y-4">
+                    
+                    <!-- 1. Meeting Title -->
+                    <div>
+                        <label for="meetingTitle" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                            1. Meeting Title <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="meetingTitle" 
+                                name="title" 
+                                required
+                                placeholder="e.g. Q4 Executive Budget Review"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 2. Person / Company Name -->
+                    <div>
+                        <label for="personCompany" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                            2. Person / Company Name <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="personCompany" 
+                                name="person_company" 
+                                required
+                                placeholder="e.g. Apex Logistics (CTO Sarah Jenkins)"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 3. Meeting Date & Time -->
+                    <div>
+                        <label for="meetingDateTime" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                            3. Meeting Date and Time
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="meetingDateTime" 
+                                name="date_time" 
+                                placeholder="e.g. Tomorrow at 2:00 PM EST or Oct 15, 2026"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- 4. Meeting Purpose -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="meetingPurpose" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                4. Meeting Purpose <span class="text-rose-500">*</span>
+                            </label>
+                            <span class="text-[11px] text-slate-400">What is the primary objective?</span>
+                        </div>
+                        <textarea 
+                            id="meetingPurpose" 
+                            name="purpose" 
+                            rows="2" 
+                            required
+                            placeholder="e.g. Present cloud security migration roadmap, resolve downtime concerns, and agree on a pilot timeline."
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition resize-y"
+                        ></textarea>
+                    </div>
+
+                    <!-- 5. Previous Meeting Notes -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="previousNotes" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                5. Previous Meeting Notes
+                            </label>
+                            <span class="text-[11px] text-slate-400">Past discussions / commitments</span>
+                        </div>
+                        <textarea 
+                            id="previousNotes" 
+                            name="previous_notes" 
+                            rows="2" 
+                            placeholder="e.g. In discovery call, Dave loved 35% cost cut. Sarah was concerned about holiday season stability and migration risk."
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition resize-y"
+                        ></textarea>
+                    </div>
+
+                    <!-- 6. Additional Information -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="additionalInfo" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                6. Additional Information
+                            </label>
+                            <span class="text-[11px] text-slate-400">Context, budget, blockers</span>
+                        </div>
+                        <textarea 
+                            id="additionalInfo" 
+                            name="additional_info" 
+                            rows="2" 
+                            placeholder="e.g. Annual budget closes next month. CFO requires 9-month ROI payback. Decision committee meets on Thursday."
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition resize-y"
+                        ></textarea>
+                    </div>
+
+                    <!-- Error Alert Box -->
+                    <div id="formError" class="hidden p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-circle-exclamation shrink-0"></i>
+                        <span id="formErrorMessage">Please fill in all required fields.</span>
+                    </div>
+
+                    <!-- Action Button: Prepare Meeting -->
+                    <div class="pt-2">
+                        <button 
+                            type="submit" 
+                            id="prepareMeetingBtn"
+                            class="w-full py-3.5 px-4 rounded-xl text-white font-semibold text-sm sm:text-base bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-700 hover:via-indigo-600 hover:to-purple-700 shadow-lg shadow-indigo-500/25 active:scale-[0.99] transition duration-150 flex items-center justify-center gap-2.5 cursor-pointer"
+                        >
+                            <i id="btnIcon" class="fa-solid fa-bolt-lightning text-amber-300"></i>
+                            <span id="btnText">Prepare Meeting</span>
+                        </button>
+                        <p class="text-[11px] text-center text-slate-400 dark:text-slate-500 mt-2">
+                            Tip: Press <kbd class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-[10px] font-mono">Ctrl+Enter</kbd> from any field to prepare.
+                        </p>
+                    </div>
+                </form>
+
+            </section>
+
+            <!-- Right Column: Brief Output Display (7 cols on lg) -->
+            <section class="lg:col-span-7">
+                
+                <!-- State 1: Placeholder / Empty State -->
+                <div id="emptyBriefState" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 sm:p-12 text-center shadow-sm">
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 mx-auto flex items-center justify-center mb-5 shadow-inner">
+                        <i class="fa-solid fa-file-shield text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">No Meeting Prepared Yet</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6">
+                        Complete the meeting form on the left or select a sample scenario to generate your comprehensive briefing dossier.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto text-left">
+                        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1">
+                                <i class="fa-solid fa-bullseye"></i> Meeting Objective
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Defines clear primary outcome and measurable criteria.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1">
+                                <i class="fa-solid fa-list-check"></i> Key Discussion Points
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Structured agenda with time blocks and priority topics.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1">
+                                <i class="fa-solid fa-circle-question"></i> Important Questions
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">High-leverage discovery & strategic questions.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40">
+                            <div class="flex items-center gap-2 text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1">
+                                <i class="fa-solid fa-shield-halved"></i> Objection Mitigations
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Anticipate pushback with concrete talking points.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex justify-center">
+                        <button onclick="loadSamplePreset('sales-pitch')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition">
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                            Load Enterprise Sales Sample
+                        </button>
+                    </div>
+                </div>
+
+                <!-- State 2: Loading State -->
+                <div id="loadingBriefState" class="hidden bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 sm:p-12 text-center shadow-sm">
+                    <div class="w-16 h-16 rounded-full border-4 border-indigo-200 dark:border-indigo-900 border-t-indigo-600 animate-spin mx-auto mb-6"></div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Synthesizing Meeting Brief...</h3>
+                    <p id="loadingStatusText" class="text-xs sm:text-sm text-indigo-600 dark:text-indigo-400 font-medium mb-6 animate-pulse">
+                        Analyzing meeting purpose and stakeholder context...
+                    </p>
+                    <div class="w-full max-w-md mx-auto bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden mb-6">
+                        <div id="loadingProgressBar" class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 w-1/4 transition-all duration-300"></div>
+                    </div>
+                    <div class="flex justify-center gap-6 text-xs text-slate-400">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-check text-emerald-500"></i> Context parsed</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-spinner animate-spin text-indigo-500"></i> Formulating strategy</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-circle text-slate-300"></i> Packaging brief</span>
+                    </div>
+                </div>
+
+                <!-- State 3: Active Generated Brief -->
+                <div id="activeBriefContainer" class="hidden space-y-4">
+                    
+                    <!-- Action Toolbar & Header -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span id="briefTypeBadge" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                                        Sales Strategy
+                                    </span>
+                                    <span id="briefEngineBadge" class="text-[10px] text-slate-400">
+                                        Prepared just now
+                                    </span>
+                                </div>
+                                <h2 id="briefTitleDisplay" class="text-xl font-bold text-slate-900 dark:text-white">
+                                    Enterprise Cloud Migration Pitch
+                                </h2>
+                                <p id="briefTargetDisplay" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
+                                    <span><i class="fa-solid fa-building text-slate-400"></i> <strong id="briefTargetName">Apex Logistics</strong></span>
+                                    <span>•</span>
+                                    <span><i class="fa-regular fa-clock text-slate-400"></i> <span id="briefTargetTime">Tomorrow 10:30 AM</span></span>
+                                </p>
+                            </div>
+
+                            <!-- Brief Quick Actions -->
+                            <div class="flex items-center gap-1.5 self-start sm:self-center flex-wrap">
+                                <button onclick="copyBriefMarkdown()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Copy full brief to clipboard as Markdown">
+                                    <i id="copyIcon" class="fa-regular fa-copy"></i>
+                                    <span id="copyText">Copy</span>
+                                </button>
+                                <button onclick="downloadMarkdownFile()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Download brief as .md file">
+                                    <i class="fa-solid fa-download"></i>
+                                    <span>.MD</span>
+                                </button>
+                                <button onclick="downloadCalendarEvent()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Add to Calendar (.ics format)">
+                                    <i class="fa-regular fa-calendar-plus text-indigo-500"></i>
+                                    <span>Calendar</span>
+                                </button>
+                                <button onclick="printBrief()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Print or save as PDF">
+                                    <i class="fa-solid fa-print"></i>
+                                    <span>Print/PDF</span>
+                                </button>
+                                <button onclick="openEmailModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition" title="View ready-to-send follow-up email template">
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <span>Email Draft</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Brief Sections Content -->
+                        <div id="briefContent" class="space-y-4 pt-4">
+
+                            <!-- 1. Meeting Objective -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-bullseye"></i> Meeting Objective
+                                </div>
+                                <div id="briefPrimaryObjective" class="text-sm font-medium text-slate-800 dark:text-slate-100 mb-3 bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200/80 dark:border-slate-800">
+                                    Objective placeholder
+                                </div>
+                                <div class="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Measurable Success Criteria:</div>
+                                <ul id="briefSuccessCriteria" class="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                                    <!-- criteria items injected -->
+                                </ul>
+                            </div>
+
+                            <!-- 2. Person / Company Summary -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-address-card"></i> Person / Company Summary
+                                </div>
+                                <p id="briefCompanySummary" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                                    Summary placeholder
+                                </p>
+                            </div>
+
+                            <!-- 3. Key Discussion Points -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        <i class="fa-solid fa-list-ol"></i> Key Discussion Points
+                                    </div>
+                                    <span class="text-[11px] text-slate-400">Prioritized Agenda</span>
+                                </div>
+                                <div id="briefDiscussionPoints" class="space-y-2.5">
+                                    <!-- points injected -->
+                                </div>
+                            </div>
+
+                            <!-- 4. Important Questions to Ask -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        <i class="fa-solid fa-circle-question"></i> Important Questions to Ask
+                                    </div>
+                                    <span class="text-[11px] text-slate-400">High-impact prompts</span>
+                                </div>
+                                <ul id="briefQuestionsList" class="space-y-2">
+                                    <!-- questions injected -->
+                                </ul>
+                            </div>
+
+                            <!-- 5. Suggested Talking Points -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        <i class="fa-solid fa-comments"></i> Suggested Talking Points
+                                    </div>
+                                    <span class="text-[11px] text-slate-400">Value articulation</span>
+                                </div>
+                                <ul id="briefTalkingPoints" class="space-y-2">
+                                    <!-- talking points injected -->
+                                </ul>
+                            </div>
+
+                            <!-- 6. Possible Concerns or Objections -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        <i class="fa-solid fa-shield-halved"></i> Possible Concerns or Objections
+                                    </div>
+                                    <span class="text-[11px] text-slate-400">Risk & Mitigation</span>
+                                </div>
+                                <div id="briefObjectionsList" class="space-y-2.5">
+                                    <!-- objections injected -->
+                                </div>
+                            </div>
+
+                            <!-- 7. Recommended Next Steps -->
+                            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                                        <i class="fa-solid fa-forward-step"></i> Recommended Next Steps
+                                    </div>
+                                    <span class="text-[11px] text-slate-400">Post-Meeting Action Plan</span>
+                                </div>
+                                <div id="briefNextStepsList" class="space-y-2">
+                                    <!-- next steps injected -->
+                                </div>
+                            </div>
+
+                            <!-- Bonus: Pre-Meeting 3-Minute Readiness Checklist -->
+                            <div class="rounded-xl border border-indigo-200/70 dark:border-indigo-900/60 p-4 bg-indigo-50/30 dark:bg-indigo-950/20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2 text-xs font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider">
+                                        <i class="fa-solid fa-stopwatch-20"></i> Pre-Meeting 3-Minute Readiness Checklist
+                                    </div>
+                                    <span class="text-[10px] bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full font-semibold">Quick Prep</span>
+                                </div>
+                                <ul id="briefChecklist" class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+                                    <!-- checklist items injected -->
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Slide-over History Drawer -->
+    <div id="historyDrawerBackdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+    <aside id="historyDrawer" class="fixed top-0 right-0 bottom-0 w-full sm:w-96 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl z-50 translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-indigo-600 dark:text-indigo-400"></i>
+                <h3 class="font-bold text-slate-900 dark:text-white text-base">Meeting Brief History</h3>
+            </div>
+            <button onclick="closeHistoryDrawer()" class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        
+        <div class="p-3 border-b border-slate-100 dark:border-slate-800">
+            <input 
+                type="text" 
+                id="historySearchInput" 
+                oninput="filterHistoryList()" 
+                placeholder="Search past meetings..." 
+                class="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            >
+        </div>
+
+        <div id="historyListContainer" class="flex-1 overflow-y-auto p-3 space-y-2">
+            <!-- Injected via JS -->
+            <div class="text-center py-10 text-xs text-slate-400">
+                Loading history...
+            </div>
+        </div>
+    </aside>
+
+    <!-- Email Modal -->
+    <div id="emailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-regular fa-envelope text-indigo-600 dark:text-indigo-400"></i>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base">Suggested Follow-Up Email</h3>
+                </div>
+                <button onclick="closeEmailModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-4 flex-1 overflow-y-auto">
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Copy and customize this follow-up template immediately after your meeting:</p>
+                <textarea id="emailDraftTextarea" rows="12" class="w-full text-xs font-mono p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 focus:outline-none"></textarea>
+            </div>
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2 bg-slate-50/50 dark:bg-slate-800/40">
+                <button onclick="closeEmailModal()" class="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg">Close</button>
+                <button onclick="copyEmailDraft()" class="px-4 py-1.5 text-xs font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-1.5">
+                    <i id="copyEmailIcon" class="fa-regular fa-copy"></i>
+                    <span id="copyEmailBtnText">Copy Email</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phone / Mobile Access Modal -->
+    <div id="phoneModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-mobile-screen-button text-indigo-600 dark:text-indigo-400"></i>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base">Open on Your Phone</h3>
+                </div>
+                <button onclick="closePhoneModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-4 text-center">
+                <!-- QR Code Box -->
+                <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 inline-block shadow-inner">
+                    <img id="phoneQrImage" src="" alt="Scan QR Code to open on phone" class="w-44 h-44 rounded-xl mx-auto border border-slate-200 dark:border-slate-700 bg-white">
+                    <p class="text-[11px] text-slate-400 mt-2 font-medium">Point phone camera to scan</p>
+                </div>
+
+                <!-- URL Copy Box -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1.5 text-left">
+                        Phone Browser Link:
+                    </label>
+                    <div class="flex items-center gap-1.5">
+                        <input 
+                            type="text" 
+                            id="phoneNetworkUrlInput" 
+                            readonly 
+                            class="flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 focus:outline-none"
+                        >
+                        <button onclick="copyPhoneUrl()" class="px-3 py-2 text-xs font-semibold bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition flex items-center gap-1">
+                            <i id="copyPhoneIcon" class="fa-regular fa-copy"></i>
+                            <span id="copyPhoneText">Copy</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="text-left text-xs text-slate-500 dark:text-slate-400 space-y-1.5 bg-indigo-50/50 dark:bg-indigo-950/30 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
+                    <div class="font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-wifi text-indigo-500"></i> Easy Connection Steps:
+                    </div>
+                    <p>1. Connect your phone to the <strong>same Wi-Fi network</strong> as your computer.</p>
+                    <p>2. Open your phone's camera and scan the QR code above, or enter the link in Safari/Chrome.</p>
+                </div>
+            </div>
+            <div class="p-3 border-t border-slate-200 dark:border-slate-800 flex justify-end bg-slate-50/50 dark:bg-slate-800/40">
+                <button onclick="closePhoneModal()" class="px-4 py-1.5 text-xs font-semibold bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-indigo-600 dark:text-indigo-400"></i>
+                    <h3 class="font-bold text-slate-900 dark:text-white text-base">Application Settings</h3>
+                </div>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                        Intelligence Mode
+                    </label>
+                    <div class="p-3 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-xs text-slate-700 dark:text-slate-300">
+                        <div class="font-semibold text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5 mb-1">
+                            <i class="fa-solid fa-microchip"></i> Smart Heuristic Engine (Active)
+                        </div>
+                        Synthesizes contextual briefs locally without needing any API key or external network service.
+                    </div>
+                </div>
+
+                <div>
+                    <label for="geminiApiKey" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                        Optional Gemini API Key
+                    </label>
+                    <input 
+                        type="password" 
+                        id="geminiApiKey" 
+                        placeholder="AIzaSy..." 
+                        class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    >
+                    <p class="text-[11px] text-slate-400 mt-1">If provided, the app can call Google Gemini directly. If omitted, the built-in contextual engine is used automatically.</p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-2 bg-slate-50/50 dark:bg-slate-800/40">
+                <button onclick="closeSettingsModal()" class="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg">Cancel</button>
+                <button onclick="saveSettings()" class="px-4 py-1.5 text-xs font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save Preferences</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg bg-slate-900 text-white text-xs font-medium">
+        <i id="toastIcon" class="fa-solid fa-check text-emerald-400"></i>
+        <span id="toastMessage">Action completed</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

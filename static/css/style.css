@@ -1,0 +1,108 @@
+/* Custom font & styling enhancements */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Smooth Focus & Transitions */
+input, textarea, button {
+    transition: all 0.15s ease-in-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.25s ease-out forwards;
+}
+
+/* Print Stylesheet for Executive PDF generation */
+@media print {
+    header, 
+    #welcomeBanner, 
+    #sampleDropdownBtn, 
+    #sampleDropdownMenu, 
+    #historyDrawerBtn, 
+    #settingsModalBtn, 
+    #themeToggleBtn, 
+    #meetingForm, 
+    section.lg\:col-span-5, 
+    #historyDrawer, 
+    #historyDrawerBackdrop, 
+    #emailModal, 
+    #settingsModal, 
+    #toastNotification,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-size: 11pt !important;
+    }
+
+    main {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .grid {
+        display: block !important;
+    }
+
+    section.lg\:col-span-7 {
+        width: 100% !important;
+    }
+
+    #activeBriefContainer {
+        display: block !important;
+    }
+
+    .rounded-xl, .rounded-2xl {
+        border-radius: 6px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 12pt !important;
+        padding: 10pt !important;
+    }
+
+    /* Print header banner */
+    #activeBriefContainer::before {
+        content: "MEETING PREPARATION BRIEF • CONFIDENTIAL";
+        display: block;
+        font-size: 9pt;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        color: #64748b;
+        border-bottom: 2px solid #4f46e5;
+        padding-bottom: 4pt;
+        margin-bottom: 14pt;
+    }
+}
